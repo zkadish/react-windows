@@ -1,17 +1,21 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import ReactDOM from 'react-dom';
-import createStore from '../store/create-store'
 
-import Form from './Form';
+import CreateWindowz from './CreateWindowz';
+import WindowzHandler from './WindowzHandler';
 
-import '../css/app.scss';
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+  }
 
-const Store = createStore();
+  render() {
+    return (
+      <div>
+        <CreateWindowz />
+        <WindowzHandler />
+      </div>
+    );
+  }
+}
 
-ReactDOM.render(
-  <Provider store={Store}>
-    <Form />
-  </Provider>,
-  document.getElementById('app')
-);
+export default App;

@@ -1,19 +1,32 @@
 
 const defaultState = {
-  updateAppState: 'Hello World',
-}
+  windowz: [],
+};
 
+let index;
 
-export function appState (state = defaultState, action) {
-  switch(action.type) {
-    case 'UPDATE_APP_STATE':
-      return {
-        ...state,
-        updateAppState: action.value
-      };
-    default:
-      return {
-        ...state
-      };
+const WindowzHandler = (state = defaultState, action) => {
+  switch (action.type) {
+  case 'REMOVE_WINDOWZ':
+    state.windowz.forEach((wz, i) => {
+      if (wz === action.value.id) {
+        index = i;
+      }
+    });
+    return {
+      ...state,
+      windowz: [...state.windowz.slice(0, index), ...state.windowz.slice(index + 1)],
+    };
+  case 'ADD_WINDOWZ':
+    return {
+      ...state,
+      windowz: [...state.windowz, action.value],
+    };
+  default:
+    return {
+      ...state,
+    };
   }
-}
+};
+
+export default WindowzHandler;

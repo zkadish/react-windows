@@ -8,7 +8,6 @@ function Store(data) {
   const reducer = combineReducers(reducers);
   // const finalCreateStore = applyMiddleware(SomeMiddleware)(createStore);
   const store = createStore(reducer, data);
-  
   return store;
 }
 
