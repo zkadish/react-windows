@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import WindowzHeader from './WindowzHeader';
 
@@ -9,8 +10,8 @@ class Windowz extends React.Component {
     this.state = {
       style: {
         position: 'absolute',
-        top: '100px',
-        left: '100px',
+        top: `${props.details.position.x || 100}px`,
+        left: `${props.details.position.y || 100}px`,
         height: '300px',
         width: '300px',
       },
@@ -19,8 +20,30 @@ class Windowz extends React.Component {
     this.moveWindowz = this.moveWindowz.bind(this);
   }
 
+  componentDidMount() {
+    console.log('Windowz componentDidMount', this.windowzDOM);
+  }
+
+  componentWillUnmount() {
+    // console.log('componentWillUnmount', this.props.details.id);
+    // this.props.dispatch({ type: 'REMOVE_WINDOWZ', value: this.props.details})
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps', nextProps);
+    this.setState({
+      style: {
+        position: 'absolute',
+        top: nextProps.position.y,
+        left: nextProps.position.x,
+        height: '300px',
+        width: '300px',
+      },
+    });
+  }
+
   moveWindowz(event) {
-    const windowzPos = this.windowzDOM.getBoundingClientRect();
+    let windowzPos = this.windowzDOM.getBoundingClientRect();
     let top = windowzPos.top;
     const offSetTop = windowzPos.top - event.clientY;
     let left = windowzPos.left;
@@ -43,16 +66,34 @@ class Windowz extends React.Component {
       left = moveLeft;
     };
 
-    function mouseUpHandler() {
+    const mouseUpHandler = () => {
+      windowzPos = this.windowzDOM.getBoundingClientRect();
+      const details = {
+        ...this.props.details,
+        position: {
+          x: windowzPos.left,
+          y: windowzPos.top,
+        },
+      };
+      this.props.dispatch({ type: 'UPDATE_WINDOWZ', value: details });
+
       window.removeEventListener('mousemove', mouseMoveHandler, false);
       window.removeEventListener('mouseup', mouseUpHandler, false);
-    }
+    };
 
     window.addEventListener('mousemove', mouseMoveHandler, false);
     window.addEventListener('mouseup', mouseUpHandler, false);
   }
 
   render() {
+    console.log('Windowz render()', this.state.style);
+    console.log('windowz render()', this.windowzDOM);
+    
+    if (this.windowzDOM) {
+      // this.windowzDOM.removeAttribute('style');
+    }
+    // console.log('windowz render()', this.windowzDOM);
+    
     return (
       <div
         ref={(c) => { this.windowzDOM = c; }}
@@ -62,14 +103,35 @@ class Windowz extends React.Component {
       >
         <WindowzHeader
           moveWindowz={this.moveWindowz}
+          details={this.props.details}
         />
+        <div>
+          {this.props.details.id}
+        </div>
       </div>
     );
   }
 }
 
 Windowz.propTypes = {
+  dispatch: React.PropTypes.func,
   id: React.PropTypes.string,
+  details: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.object,
+    React.PropTypes.number,
+  ]),
 };
 
-export default Windowz;
+const mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+  };
+};
+
+const WindowzMap = connect(
+  null,
+  mapDispatchToProps,
+)(Windowz);
+
+export default WindowzMap;

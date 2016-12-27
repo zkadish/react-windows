@@ -16,11 +16,17 @@ class CreateWindowz extends React.Component {
   }
 
   createWindowz() {
+    const position = {
+      x: Number(this.inputX.value) || 0,
+      y: Number(this.inputY.value) || 0,
+    };
     const winodwzOptions = {
       id: Guid.raw(),
-      header: 'header',
-      posX: Number(this.inputX.value) || 0,
-      posY: Number(this.inputY.value) || 0,
+      header: {
+        title: 'windowz title',
+        minmax: 'window-maximize',
+      },
+      position,
     };
 
     this.props.dispatch({

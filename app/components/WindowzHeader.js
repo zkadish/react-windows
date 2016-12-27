@@ -1,47 +1,81 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import FontIcon from './FontIcon';
 
-function WindowzHeader(props) {
-  let minMaxIcon = 'window-maximize';
+class WindowzHeader extends React.Component {
+  constructor(props) {
+    super(props);
 
-  function toggleMinMax() {
-    if (minMaxIcon === 'window-maximize') {
-      minMaxIcon = 'window-minimize';
-    } else {
-      minMaxIcon = 'window-maximize';
-    }
-    console.log(minMaxIcon);
+    this.state = { ...props.details };
+
+    this.toggleMinMax = this.toggleMinMax.bind(this);
+    this.closeWindowz = this.closeWindowz.bind(this);
   }
 
-  const closeWindowz = function test() {
-    console.log('closeWindowz')
-  };
+  toggleMinMax() {
+    const details = { ...this.props.details };
+    if (details.header.minmax === 'window-maximize') {
+      details.header.minmax = 'window-minimize';
+    } else {
+      details.header.minmax = 'window-maximize';
+    }
+    this.props.dispatch({ type: 'UPDATE_WINDOWZ', value: details });
+  }
 
-  return (
-    <div
-      className="windowz-header"
-      onMouseDown={props.moveWindowz}
-    >
-      <div className="title">
-        header
+  closeWindowz() {
+    console.log('closeWindowz', this.props.details.id);
+    // const windowz = document.getElementById(this.props.details.id);
+    // windowz.parentNode.removeChild(windowz);
+
+    this.props.dispatch({ type: 'REMOVE_WINDOWZ', value: this.props.details})
+  }
+
+  render() {
+    // console.log(this.props.details)
+
+    return (
+      <div
+        className="windowz-header"
+        onMouseDown={this.props.moveWindowz}
+      >
+        <div className="title">
+          header
+        </div>
+        <FontIcon
+          icon={this.props.details.header.minmax}
+          class="minmax-icon"
+          onClick={this.toggleMinMax}
+        />
+        <FontIcon
+          onClick={this.closeWindowz}
+          icon="close"
+          class="close-icon"
+        />
       </div>
-      <FontIcon
-        icon={minMaxIcon}
-        class="minmax-icon"
-        onClick={toggleMinMax}
-      />
-      <FontIcon
-        onClick={closeWindowz}
-        icon="close"
-        class="close-icon"
-      />
-    </div>
-  );
+    );
+  }
 }
 
 WindowzHeader.propTypes = {
   moveWindowz: React.PropTypes.func,
 };
 
-export default WindowzHeader;
+const mapStateToProps = function mapStateToProps(state) {
+  return {
+    state,
+  };
+};
+
+const mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+  };
+};
+
+const WindowzHeaderMap = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(WindowzHeader);
+
+export default WindowzHeaderMap;
