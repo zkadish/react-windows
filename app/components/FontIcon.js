@@ -2,10 +2,11 @@ import React from 'react';
 
 function FontIcon(props) {
   const isButton = props.onClick;
-  const style = {
+  const btnStyle = {
     padding: '0',
-    background: '30px',
+    background: 'none',
     border: 'none',
+    outline: 'none',
   };
   const icon = props.icon;
   const cssClass = props.class || '';
@@ -14,16 +15,15 @@ function FontIcon(props) {
     return (
       <button
         onClick={props.onClick}
-        style={style}
-        className={cssClass}
+        style={btnStyle}
       >
-        <div className={`fa fa-${icon}`} />
+        <div className={`fa fa-${icon} ${cssClass}`} />
       </button>
     );
   }
 
   return (
-    <div className={`fa fa-${icon} ${style}`} />
+    <div className={`fa fa-${icon} ${cssClass}`} />
   );
 }
 
