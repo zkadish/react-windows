@@ -16,17 +16,19 @@ class CreateWindowz extends React.Component {
   }
 
   createWindowz() {
-    const position = {
-      x: Number(this.inputX.value) || 0,
-      y: Number(this.inputY.value) || 0,
-    };
     const winodwzOptions = {
       id: Guid.raw(),
       header: {
         title: 'windowz title',
         minmax: 'window-maximize',
       },
-      position,
+      position: {
+        position: 'absolute',
+        top: `${Number(this.inputY.value) || 100}px`,
+        left: `${Number(this.inputX.value) || 100}px`,
+        height: `${Number(this.inputHeight.value) || 300}px`,
+        width: `${Number(this.inputWidth.value) || 300}px`,
+      },
     };
 
     this.props.dispatch({
@@ -52,6 +54,20 @@ class CreateWindowz extends React.Component {
           y:
           <input
             ref={(c) => { this.inputY = c; }}
+            type="text"
+          />
+        </div>
+        <div>
+          h:
+          <input
+            ref={(c) => { this.inputHeight = c; }}
+            type="text"
+          />
+        </div>
+        <div>
+          w:
+          <input
+            ref={(c) => { this.inputWidth = c; }}
             type="text"
           />
         </div>

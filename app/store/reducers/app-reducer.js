@@ -24,13 +24,13 @@ const WindowzHandler = (state = defaultState, action) => {
         index = i;
       }
     });
-    console.log('REMOVE_WINDOWZ', action.value.id, index);
-    let start = state.windowz.slice(0, index);
-    let end = state.windowz.slice(index + 1);
-
+    // console.log('REMOVE_WINDOWZ', action.value.id, index);
     return {
       ...state,
-      windowz: [...start, ...end],
+      windowz: [
+        ...state.windowz.slice(0, index),
+        ...state.windowz.slice(index + 1),
+      ],
     };
   case 'ADD_WINDOWZ':
     return {

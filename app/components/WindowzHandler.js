@@ -8,46 +8,29 @@ class WindowzHandler extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      windowz: [...this.props.windowz],
-    };
+    // this.state = {
+    //   windowz: [...this.props.windowz],
+    // };
   }
 
   componentWillReceiveProps(nextProps) {
     // console.log(nextProps);
-    if (this.props !== nextProps) {
-      this.setState({ windowz: nextProps.windowz });
-    }
+    // if (this.props !== nextProps) {
+    //   this.setState({ windowz: nextProps.windowz });
+    // }
   }
 
   render() {
-    console.log('WindowzHandler: render():', this.props.windowz);
-
-    // const windowz = this.props.windowz.map((w, i) => {
-    //   return (
-    //     <Windowz
-    //       id={w.id}
-    //       details={w}
-    //       position={w.position}
-    //       key={i}
-    //     />
-    //   );
-    // });
-
-    // console.log('WindowzHandler: render():', windowz);
-
+    // console.log('WindowzHandler: render():', this.props.windowz);
     return (
       <div id="windowz-handler">
-        { this.state.windowz.map((w, i) => {
-          return (
-            <Windowz
-              id={w.id}
-              details={w}
-              position={w.position}
-              key={i}
-            />
-          )
-        }) }
+        { this.props.windowz.map((w, i) =>
+          <Windowz
+            id={w.id}
+            details={w}s
+            key={i}
+          />,
+        )}
       </div>
     );
   }

@@ -7,39 +7,19 @@ class Windowz extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      style: {
-        position: 'absolute',
-        top: `${props.details.position.x || 100}px`,
-        left: `${props.details.position.y || 100}px`,
-        height: '300px',
-        width: '300px',
-      },
-    };
-
     this.moveWindowz = this.moveWindowz.bind(this);
   }
 
   componentDidMount() {
-    console.log('Windowz componentDidMount', this.windowzDOM);
+    // console.log('Windowz componentDidMount', this.windowzDOM);
   }
+
+  // componentWillReceiveProps(nextProps) {
+  //   console.log('componentWillReceiveProps', nextProps);
+  // }
 
   componentWillUnmount() {
     // console.log('componentWillUnmount', this.props.details.id);
-    // this.props.dispatch({ type: 'REMOVE_WINDOWZ', value: this.props.details})
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps', nextProps);
-    this.setState({
-      style: {
-        position: 'absolute',
-        top: nextProps.position.y,
-        left: nextProps.position.x,
-        height: '300px',
-        width: '300px',
-      },
-    });
   }
 
   moveWindowz(event) {
@@ -71,8 +51,11 @@ class Windowz extends React.Component {
       const details = {
         ...this.props.details,
         position: {
-          x: windowzPos.left,
-          y: windowzPos.top,
+          position: 'absolute',
+          top: windowzPos.top,
+          left: windowzPos.left,
+          height: windowzPos.height,
+          width: windowzPos.width,
         },
       };
       this.props.dispatch({ type: 'UPDATE_WINDOWZ', value: details });
@@ -86,20 +69,18 @@ class Windowz extends React.Component {
   }
 
   render() {
-    console.log('Windowz render()', this.state.style);
-    console.log('windowz render()', this.windowzDOM);
-    
-    if (this.windowzDOM) {
-      // this.windowzDOM.removeAttribute('style');
-    }
-    // console.log('windowz render()', this.windowzDOM);
-    
+    console.log('Windowz render()', this.props.windowzArray);
+    // get "this" window from windowz array
+    const windowz = this.props.windowzArray.filter(
+      w => w.id === this.props.id,
+    )[0];
+
     return (
       <div
         ref={(c) => { this.windowzDOM = c; }}
         id={this.props.id}
         className="windowz-container"
-        style={this.state.style}
+        style={windowz.position}
       >
         <WindowzHeader
           moveWindowz={this.moveWindowz}
@@ -116,11 +97,20 @@ class Windowz extends React.Component {
 Windowz.propTypes = {
   dispatch: React.PropTypes.func,
   id: React.PropTypes.string,
+  windowzArray: React.PropTypes.arrayOf(
+    React.PropTypes.object,
+  ),
   details: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.object,
     React.PropTypes.number,
   ]),
+};
+
+const mapStateToProps = function mapStateToProps(state) {
+  return {
+    windowzArray: state.default.windowz,
+  };
 };
 
 const mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -130,7 +120,7 @@ const mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 
 const WindowzMap = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(Windowz);
 
