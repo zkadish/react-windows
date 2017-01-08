@@ -1,12 +1,18 @@
 
 const defaultState = {
   windowz: [],
+  zIndex: 0,
 };
 let windowz = [];
 let index;
 
 const WindowzHandler = (state = defaultState, action) => {
   switch (action.type) {
+  case 'INCREMENT_ZINDEX':
+    return {
+      ...state,
+      zIndex: state.zIndex + 1,
+    };
   case 'UPDATE_WINDOWZ':
     windowz = state.windowz.map((w) => {
       if (w.id === action.value.id) {
@@ -24,7 +30,6 @@ const WindowzHandler = (state = defaultState, action) => {
         index = i;
       }
     });
-    // console.log('REMOVE_WINDOWZ', action.value.id, index);
     return {
       ...state,
       windowz: [

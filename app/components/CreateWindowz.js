@@ -22,14 +22,19 @@ class CreateWindowz extends React.Component {
         title: 'windowz title',
         minmax: 'window-maximize',
       },
-      position: {
+      style: {
         position: 'absolute',
         top: `${Number(this.inputY.value) || 100}px`,
         left: `${Number(this.inputX.value) || 100}px`,
         height: `${Number(this.inputHeight.value) || 300}px`,
         width: `${Number(this.inputWidth.value) || 300}px`,
+        zIndex: `${this.props.zIndex}`,
       },
     };
+
+    this.props.dispatch({
+      type: 'INCREMENT_ZINDEX',
+    });
 
     this.props.dispatch({
       type: 'ADD_WINDOWZ',
@@ -84,11 +89,12 @@ class CreateWindowz extends React.Component {
 
 CreateWindowz.propTypes = {
   dispatch: React.PropTypes.func,
+  zIndex: React.PropTypes.number,
 };
 
 const mapStateToProps = function mapStateToProps(state) {
   return {
-    state,
+    zIndex: state.default.zIndex,
   };
 };
 

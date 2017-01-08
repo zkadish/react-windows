@@ -7,18 +7,11 @@ import Windowz from './Windowz';
 class WindowzHandler extends React.Component {
   constructor(props) {
     super(props);
-
-    // this.state = {
-    //   windowz: [...this.props.windowz],
-    // };
   }
 
-  componentWillReceiveProps(nextProps) {
-    // console.log(nextProps);
-    // if (this.props !== nextProps) {
-    //   this.setState({ windowz: nextProps.windowz });
-    // }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   // console.log(nextProps);
+  // }
 
   render() {
     // console.log('WindowzHandler: render():', this.props.windowz);

@@ -7,8 +7,6 @@ class WindowzHeader extends React.Component {
   constructor(props) {
     super(props);
 
-    // this.state = { ...props.details };
-
     this.toggleMinMax = this.toggleMinMax.bind(this);
     this.closeWindowz = this.closeWindowz.bind(this);
   }
@@ -17,6 +15,7 @@ class WindowzHeader extends React.Component {
     const details = { ...this.props.details };
     let header = { ...this.props.details.header };
     let position = { ...this.props.details.position };
+
     if (details.header.minmax === 'window-maximize') {
       header = { ...header, minmax: 'window-minimize' };
       position = { ...position, height: '55px' };
@@ -24,24 +23,23 @@ class WindowzHeader extends React.Component {
       header = { ...header, minmax: 'window-maximize' };
       position = { ...position, height: '300px' };
     }
-    this.props.dispatch({ type: 'UPDATE_WINDOWZ', value: {
-      id: details.id,
-      header,
-      position,
-    } });
+    this.props.dispatch({
+      type: 'UPDATE_WINDOWZ',
+      value: {
+        id: details.id,
+        header,
+        position,
+      } });
   }
 
   closeWindowz() {
-    console.log('closeWindowz', this.props.details.id);
-    // const windowz = document.getElementById(this.props.details.id);
-    // windowz.parentNode.removeChild(windowz);
-
-    this.props.dispatch({ type: 'REMOVE_WINDOWZ', value: this.props.details})
+    this.props.dispatch({
+      type: 'REMOVE_WINDOWZ',
+      value: this.props.details,
+    });
   }
 
   render() {
-    // console.log(this.props.details)
-
     return (
       <div
         className="windowz-header"
@@ -56,9 +54,9 @@ class WindowzHeader extends React.Component {
           onClick={this.toggleMinMax}
         />
         <FontIcon
-          onClick={this.closeWindowz}
           icon="close"
           class="close-icon"
+          onClick={this.closeWindowz}
         />
       </div>
     );
@@ -66,7 +64,12 @@ class WindowzHeader extends React.Component {
 }
 
 WindowzHeader.propTypes = {
+  dispatch: React.PropTypes.func,
   moveWindowz: React.PropTypes.func,
+  details: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.object,
+  ]),
 };
 
 const mapStateToProps = function mapStateToProps(state) {
