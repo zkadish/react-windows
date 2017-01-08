@@ -3,6 +3,13 @@ import { connect } from 'react-redux';
 
 import WindowzHeader from './WindowzHeader';
 import ResizeLeft from './ResizeLeft';
+import ResizeRight from './ResizeRight';
+import ResizeTop from './ResizeTop';
+import ResizeBottom from './ResizeBottom';
+import ResizeTopLeft from './ResizeTopLeft';
+import ResizeTopRight from './ResizeTopRight';
+import ResizeBottomLeft from './ResizeBottomLeft';
+import ResizeBottomRight from './ResizeBottomRight';
 
 class Windowz extends React.Component {
   constructor(props) {
@@ -123,9 +130,14 @@ class Windowz extends React.Component {
         <div>
           {this.props.details.id}
         </div>
-        <ResizeLeft
-          windowzDOM={this.getWindowzDOM}
-        />
+        <ResizeLeft windowzDOM={this.getWindowzDOM} />
+        <ResizeRight windowzDOM={this.getWindowzDOM} />
+        <ResizeTop windowzDOM={this.getWindowzDOM} />
+        <ResizeBottom windowzDOM={this.getWindowzDOM} />
+        <ResizeTopLeft windowzDOM={this.getWindowzDOM} />
+        <ResizeTopRight windowzDOM={this.getWindowzDOM} />
+        <ResizeBottomLeft windowzDOM={this.getWindowzDOM} />
+        <ResizeBottomRight windowzDOM={this.getWindowzDOM} />
       </div>
     );
   }
