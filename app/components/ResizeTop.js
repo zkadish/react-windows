@@ -13,7 +13,7 @@ class ResizeTop extends React.Component {
         left: '0',
         height: '3px',
         cursor: 'ns-resize',
-        background: 'red',
+        // background: 'red',
       },
     };
 

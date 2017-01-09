@@ -17,6 +17,7 @@ body {
 .windowz-container {
   user-select: none;
   box-sizing: border-box;
+  overflow: hidden;
   background: palegreen;
   border: 1px solid green;
 }

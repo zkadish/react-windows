@@ -13,7 +13,7 @@ class ResizeTopRight extends React.Component {
         height: '10px',
         width: '10px',
         cursor: 'nesw-resize',
-        background: 'blue',
+        // background: 'blue',
       },
     };
 

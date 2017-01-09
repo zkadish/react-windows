@@ -7,28 +7,31 @@ class WindowzHeader extends React.Component {
   constructor(props) {
     super(props);
 
+    this.previousHeight = this.props.details.style.height;
     this.toggleMinMax = this.toggleMinMax.bind(this);
     this.closeWindowz = this.closeWindowz.bind(this);
   }
 
   toggleMinMax() {
+    // console.log('toggleMinMax', this.props.details);
     const details = { ...this.props.details };
     let header = { ...this.props.details.header };
-    let position = { ...this.props.details.position };
+    let style = { ...this.props.details.style };
 
     if (details.header.minmax === 'window-maximize') {
+      this.previousHeight = this.props.details.style.height;
       header = { ...header, minmax: 'window-minimize' };
-      position = { ...position, height: '55px' };
+      style = { ...style, height: '30px' };
     } else {
       header = { ...header, minmax: 'window-maximize' };
-      position = { ...position, height: '300px' };
+      style = { ...style, height: this.previousHeight };
     }
     this.props.dispatch({
       type: 'UPDATE_WINDOWZ',
       value: {
         id: details.id,
         header,
-        position,
+        style,
       } });
   }
 

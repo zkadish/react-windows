@@ -13,7 +13,7 @@ class ResizeLeft extends React.Component {
         left: '-1px',
         width: '3px',
         cursor: 'ew-resize',
-        background: 'red',
+        // background: 'red',
       },
     };
 
