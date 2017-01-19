@@ -50,10 +50,21 @@ class Windowz extends React.Component {
 
     const mouseMoveHandler = (e) => {
       const changeTop = e.clientY - top;
-      const moveTop = (top + offsetTop) + changeTop;
-
+      let moveTop = (top + offsetTop) + changeTop;
+      if (moveTop <= 0) {
+        moveTop = 0;
+      }
+      if (moveTop >= window.innerHeight - windowzPos.height) {
+        moveTop = window.innerHeight - windowzPos.height;
+      }
       const changeLeft = e.clientX - left;
-      const moveLeft = (left + offsetLeft) + changeLeft;
+      let moveLeft = (left + offsetLeft) + changeLeft;
+      if (moveLeft <= 0) {
+        moveLeft = 0;
+      }
+      if (moveLeft >= window.innerWidth - windowzPos.width) {
+        moveLeft = window.innerWidth - windowzPos.width;
+      }
       this.windowzDOM.style.cssText = `position: absolute;
                                        top: ${moveTop}px;
                                        left: ${moveLeft}px;
