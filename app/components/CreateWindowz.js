@@ -20,7 +20,7 @@ class CreateWindowz extends React.Component {
       id: Guid.raw(),
       header: {
         title: 'windowz title',
-        minmax: 'window-maximize',
+        minmax: 'window-minimize',
       },
       style: {
         position: 'absolute',
