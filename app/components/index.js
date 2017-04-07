@@ -5,7 +5,7 @@ import createStore from '../store/create-store';
 
 import App from './App';
 
-// import '../css/app.scss';
+import '../scss/index.scss';
 
 const Store = createStore();
 

@@ -2,14 +2,14 @@ import cssobj from 'cssobj';
 import * as $ from './vars';
 
 const css = {
-  body: {
-    background: $.background,
-  },
-  '.create-windowz-container': {
-    padding: '10px',
-    width: '150px',
-    border: `1px solid ${$.bordercolor}`,
-  },
+  // body: {
+  //   background: $.background,
+  // },
+  // '.create-windowz-container': {
+  //   padding: '10px',
+  //   width: '150px',
+  //   border: `1px solid ${$.bordercolor}`,
+  // },
   '.create-windowz-button': {
     padding: '5px',
     margin: '5px',
