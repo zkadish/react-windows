@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Guid from 'guid';
@@ -22,19 +23,19 @@ class CreateWindowz extends React.Component {
         title: 'windowz title',
         minmax: 'window-minimize',
       },
-      style: {
-        position: 'absolute',
-        top: `${Number(this.inputY.value) || 100}px`,
-        left: `${Number(this.inputX.value) || 100}px`,
-        height: `${Number(this.inputHeight.value) || 300}px`,
-        width: `${Number(this.inputWidth.value) || 300}px`,
-        zIndex: `${this.props.zIndex}`,
-      },
+      // style: {
+      //   position: 'absolute',
+      //   top: `${Number(this.inputY.value) || 100}px`,
+      //   left: `${Number(this.inputX.value) || 100}px`,
+      //   height: `${Number(this.inputHeight.value) || 300}px`,
+      //   width: `${Number(this.inputWidth.value) || 300}px`,
+      //   zIndex: `${this.props.zIndex}`,
+      // },
     };
 
-    this.props.dispatch({
-      type: 'INCREMENT_ZINDEX',
-    });
+    // this.props.dispatch({
+    //   type: 'INCREMENT_ZINDEX',
+    // });
 
     this.props.dispatch({
       type: 'ADD_WINDOWZ',
@@ -88,15 +89,15 @@ class CreateWindowz extends React.Component {
 }
 
 CreateWindowz.propTypes = {
-  dispatch: React.PropTypes.func,
-  zIndex: React.PropTypes.number,
+  dispatch: PropTypes.func,
+  // zIndex: React.PropTypes.number,
 };
 
-const mapStateToProps = function mapStateToProps(state) {
-  return {
-    zIndex: state.default.zIndex,
-  };
-};
+// const mapStateToProps = function mapStateToProps(state) {
+//   return {
+//     zIndex: state.default.zIndex,
+//   };
+// };
 
 const mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
@@ -105,7 +106,7 @@ const mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 
 const CreateWindowzMap = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(CreateWindowz);
 

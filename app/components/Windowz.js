@@ -1,7 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import cssobj from 'cssobj';
 
 import WindowzHeader from './WindowzHeader';
+import WindowzResizer from './WindowzResizer';
 import ResizeLeft from './ResizeLeft';
 import ResizeRight from './ResizeRight';
 import ResizeTop from './ResizeTop';
@@ -15,25 +18,29 @@ class Windowz extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      windowzDOM: this.windowzDOM || null,
-    };
+    // this.state = {
+    //   windowzDOM: this.windowzDOM || null,
+    // };
 
     this.moveWindowz = this.moveWindowz.bind(this);
     this.bringToFront = this.bringToFront.bind(this);
     this.getWindowzDOM = this.getWindowzDOM.bind(this);
+
+    this.winCssObj = {
+      [`.windowz-position-${props.id}`]: {
+        position: 'absolute',
+        top: '100px',
+        left: '100px',
+        height: '300px',
+        width: '300px',
+        'z-index': '0',
+      },
+    };
+    this.windowzPosition = cssobj(this.winCssObj);
   }
 
-  componentDidMount() {
-    // console.log('Windowz componentDidMount', this.windowzDOM);
-  }
-
-  // componentWillReceiveProps(nextProps) {
-  //   console.log('componentWillReceiveProps', nextProps);
-  // }
-
-  componentWillUnmount() {
-    // console.log('componentWillUnmount', this.props.details.id);
+  componentWillMount() {
+    this.props.updateWindowz(this.props.details, this.winCssObj);
   }
 
   getWindowzDOM() {
@@ -41,8 +48,7 @@ class Windowz extends React.Component {
   }
 
   moveWindowz(event) {
-    // console.log('moveWindowz');
-    let windowzPos = this.windowzDOM.getBoundingClientRect();
+    const windowzPos = this.windowzDOM.getBoundingClientRect();
     let top = windowzPos.top;
     const offsetTop = windowzPos.top - event.clientY;
     let left = windowzPos.left;
@@ -65,31 +71,23 @@ class Windowz extends React.Component {
       if (moveLeft >= window.innerWidth - windowzPos.width) {
         moveLeft = window.innerWidth - windowzPos.width;
       }
-      this.windowzDOM.style.cssText = `position: absolute;
-                                       top: ${moveTop}px;
-                                       left: ${moveLeft}px;
-                                       height: ${windowzPos.height}px;
-                                       width: ${windowzPos.width}px;
-                                       z-index: ${this.windowzDOM.style.zIndex}`;
+
+      this.winCssObj[`.windowz-position-${this.props.id}`] = {
+        ...this.winCssObj[`.windowz-position-${this.props.id}`],
+        top: `${moveTop}px`,
+        left: `${moveLeft}px`,
+        height: `${windowzPos.height}px`,
+        width: `${windowzPos.width}px`,
+        'z-index': `${this.winCssObj[`.windowz-position-${this.props.id}`]['z-index']}`,
+      };
+      this.windowzPosition.update();
 
       top = moveTop;
       left = moveLeft;
     };
 
     const mouseUpHandler = () => {
-      windowzPos = this.windowzDOM.getBoundingClientRect();
-      const details = {
-        ...this.props.details,
-        style: {
-          position: 'absolute',
-          top: `${windowzPos.top}px`,
-          left: `${windowzPos.left}px`,
-          height: `${windowzPos.height}px`,
-          width: `${windowzPos.width}px`,
-          zIndex: `${this.windowzDOM.style.zIndex}`,
-        },
-      };
-      this.props.dispatch({ type: 'UPDATE_WINDOWZ', value: details });
+      this.props.updateWindowz(this.props.details, this.winCssObj);
 
       window.removeEventListener('mousemove', mouseMoveHandler, false);
       window.removeEventListener('mouseup', mouseUpHandler, false);
@@ -100,38 +98,26 @@ class Windowz extends React.Component {
   }
 
   bringToFront() {
-    // console.log('bringToFront', this.props.zIndex);
-    const windowzPos = this.windowzDOM.getBoundingClientRect();
-    const details = {
-      ...this.props.details,
-      style: {
-        position: 'absolute',
-        top: `${windowzPos.top}px`,
-        left: `${windowzPos.left}px`,
-        height: `${windowzPos.height}px`,
-        width: `${windowzPos.width}px`,
-        zIndex: `${this.props.zIndex}`,
-      },
+    this.winCssObj[`.windowz-position-${this.props.id}`] = {
+      ...this.winCssObj[`.windowz-position-${this.props.id}`],
+      'z-index': `${this.props.zIndex}`,
     };
+    this.windowzPosition.update();
 
-    this.props.dispatch({ type: 'UPDATE_WINDOWZ', value: details });
-    this.props.dispatch({ type: 'INCREMENT_ZINDEX' });
+    this.props.updateWindowz(this.props.details, this.winCssObj);
+    this.props.incrementZindex();
   }
 
   render() {
-    // console.log('Windowz render()', this.props.windowzArray);
-    // get "this" window from windowz array
-    // so that is renders with updates
-    const windowz = this.props.windowzArray.filter(
-      w => w.id === this.props.id,
-    )[0];
+    // const windowz = this.props.windowzArray.filter(
+    //   w => w.id === this.props.id,
+    // )[0];
 
     return (
       <div
         ref={(c) => { this.windowzDOM = c; }}
         id={this.props.id}
-        className="windowz-container"
-        style={windowz.style}
+        className={`windowz-container windowz-position-${this.props.id}`}
         onMouseDown={this.bringToFront}
       >
         <WindowzHeader
@@ -141,12 +127,50 @@ class Windowz extends React.Component {
         <div>
           {this.props.details.id}
         </div>
+        {/* <WindowzResizer
+          direction="topLeft"
+          windowzDOM={this.getWindowzDOM}
+        />
+        <WindowzResizer
+          id={this.props.details.id}
+          direction="topRight"
+          windowzDOM={this.getWindowzDOM}
+        />
+        <WindowzResizer
+          direction="right"
+          windowzDOM={this.getWindowzDOM}
+        />
+        <WindowzResizer
+          direction="bottomRight"
+          windowzDOM={this.getWindowzDOM}
+        />
+        <WindowzResizer
+          direction="bottom"
+          windowzDOM={this.getWindowzDOM}
+        />
+        <WindowzResizer
+          direction="bottomLeft"
+          windowzDOM={this.getWindowzDOM}
+        />
+        <WindowzResizer
+          direction="left"
+          windowzDOM={this.getWindowzDOM}
+        />
+        <WindowzResizer
+          direction="top"
+          windowzDOM={this.getWindowzDOM}
+        /> */}
         <ResizeLeft windowzDOM={this.getWindowzDOM} />
         <ResizeRight windowzDOM={this.getWindowzDOM} />
         <ResizeTop windowzDOM={this.getWindowzDOM} />
         <ResizeBottom windowzDOM={this.getWindowzDOM} />
         <ResizeTopLeft windowzDOM={this.getWindowzDOM} />
-        <ResizeTopRight windowzDOM={this.getWindowzDOM} />
+        <ResizeTopRight
+          id={this.props.details.id}
+          windowzDOM={this.getWindowzDOM}
+          winCssObj={this.winCssObj}
+          windowzPosition={this.windowzPosition}
+        />
         <ResizeBottomLeft windowzDOM={this.getWindowzDOM} />
         <ResizeBottomRight windowzDOM={this.getWindowzDOM} />
       </div>
@@ -155,29 +179,36 @@ class Windowz extends React.Component {
 }
 
 Windowz.propTypes = {
-  dispatch: React.PropTypes.func,
-  id: React.PropTypes.string,
-  zIndex: React.PropTypes.number,
-  windowzArray: React.PropTypes.arrayOf(
-    React.PropTypes.object,
-  ),
-  details: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.object,
-    React.PropTypes.number,
+  id: PropTypes.string,
+  zIndex: PropTypes.number,
+  details: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+    PropTypes.number,
   ]),
+  updateWindowz: PropTypes.func,
+  incrementZindex: PropTypes.func,
 };
 
 const mapStateToProps = function mapStateToProps(state) {
   return {
-    windowzArray: state.default.windowz,
+    // windowzArray: state.default.windowz,
     zIndex: state.default.zIndex,
   };
 };
 
-const mapDispatchToProps = function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = function mapDispatchToProps(dispatch, props) {
   return {
-    dispatch,
+    updateWindowz: (details, winCssobj) => {
+      const value = {
+        ...details,
+        [`.windowz-position-${props.id}`]: {
+          ...winCssobj[`.windowz-position-${props.id}`],
+        },
+      };
+      return dispatch({ type: 'UPDATE_WINDOWZ', value });
+    },
+    incrementZindex: () => dispatch({ type: 'INCREMENT_ZINDEX' }),
   };
 };
 
