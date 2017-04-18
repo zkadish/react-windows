@@ -1,0 +1,3 @@
+
+export const UPDATE_WINDOWZ = 'UPDATE_WINDOWZ';
+export const UPDATE_APP_STATE = 'UPDATE_APP_STATE';

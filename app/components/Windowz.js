@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cssobj from 'cssobj';
 
+import * as actionCreators from '../store/actions/action-creators';
+
 import WindowzHeader from './WindowzHeader';
 import WindowzResizer from './WindowzResizer';
+
 import ResizeLeft from './ResizeLeft';
 import ResizeRight from './ResizeRight';
 import ResizeTop from './ResizeTop';
@@ -109,6 +112,7 @@ class Windowz extends React.Component {
   }
 
   render() {
+    // console.log('render windowz!');
     // const windowz = this.props.windowzArray.filter(
     //   w => w.id === this.props.id,
     // )[0];
@@ -124,43 +128,66 @@ class Windowz extends React.Component {
           moveWindowz={this.moveWindowz}
           details={this.props.details}
         />
-        <div>
+        <div className="windowz-body">
           {this.props.details.id}
         </div>
-        {/* <WindowzResizer
+        <WindowzResizer
+          id={this.props.details.id}
+          direction="right"
+          windowzDOM={this.getWindowzDOM}
+          winCssObj={this.winCssObj}
+          windowzPosition={this.windowzPosition}
+        />
+        <WindowzResizer
+          id={this.props.details.id}
+          direction="bottom"
+          windowzDOM={this.getWindowzDOM}
+          winCssObj={this.winCssObj}
+          windowzPosition={this.windowzPosition}
+        />
+        <WindowzResizer
+          id={this.props.details.id}
+          direction="left"
+          windowzDOM={this.getWindowzDOM}
+          winCssObj={this.winCssObj}
+          windowzPosition={this.windowzPosition}
+        />
+        <WindowzResizer
+          id={this.props.details.id}
+          direction="top"
+          windowzDOM={this.getWindowzDOM}
+          winCssObj={this.winCssObj}
+          windowzPosition={this.windowzPosition}
+        />
+        <WindowzResizer
+          id={this.props.details.id}
           direction="topLeft"
           windowzDOM={this.getWindowzDOM}
+          winCssObj={this.winCssObj}
+          windowzPosition={this.windowzPosition}
         />
         <WindowzResizer
           id={this.props.details.id}
           direction="topRight"
           windowzDOM={this.getWindowzDOM}
+          winCssObj={this.winCssObj}
+          windowzPosition={this.windowzPosition}
         />
         <WindowzResizer
-          direction="right"
-          windowzDOM={this.getWindowzDOM}
-        />
-        <WindowzResizer
+          id={this.props.details.id}
           direction="bottomRight"
           windowzDOM={this.getWindowzDOM}
+          winCssObj={this.winCssObj}
+          windowzPosition={this.windowzPosition}
         />
         <WindowzResizer
-          direction="bottom"
-          windowzDOM={this.getWindowzDOM}
-        />
-        <WindowzResizer
+          id={this.props.details.id}
           direction="bottomLeft"
           windowzDOM={this.getWindowzDOM}
+          winCssObj={this.winCssObj}
+          windowzPosition={this.windowzPosition}
         />
-        <WindowzResizer
-          direction="left"
-          windowzDOM={this.getWindowzDOM}
-        />
-        <WindowzResizer
-          direction="top"
-          windowzDOM={this.getWindowzDOM}
-        /> */}
-        <ResizeLeft windowzDOM={this.getWindowzDOM} />
+        {/* <ResizeLeft windowzDOM={this.getWindowzDOM} />
         <ResizeRight windowzDOM={this.getWindowzDOM} />
         <ResizeTop windowzDOM={this.getWindowzDOM} />
         <ResizeBottom windowzDOM={this.getWindowzDOM} />
@@ -172,7 +199,7 @@ class Windowz extends React.Component {
           windowzPosition={this.windowzPosition}
         />
         <ResizeBottomLeft windowzDOM={this.getWindowzDOM} />
-        <ResizeBottomRight windowzDOM={this.getWindowzDOM} />
+        <ResizeBottomRight windowzDOM={this.getWindowzDOM} /> */}
       </div>
     );
   }
@@ -197,17 +224,11 @@ const mapStateToProps = function mapStateToProps(state) {
   };
 };
 
-const mapDispatchToProps = function mapDispatchToProps(dispatch, props) {
+const mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    updateWindowz: (details, winCssobj) => {
-      const value = {
-        ...details,
-        [`.windowz-position-${props.id}`]: {
-          ...winCssobj[`.windowz-position-${props.id}`],
-        },
-      };
-      return dispatch({ type: 'UPDATE_WINDOWZ', value });
-    },
+    updateWindowz: (details, winCssobj) => (
+      dispatch(actionCreators.updateWindowz(details, winCssobj))
+    ),
     incrementZindex: () => dispatch({ type: 'INCREMENT_ZINDEX' }),
   };
 };

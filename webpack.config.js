@@ -1,17 +1,20 @@
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const extractSass = new ExtractTextPlugin({
     // filename: "[name].[contenthash].css",
     filename: "bundle.css",
-    disable: process.env.NODE_ENV === "development"
+    disable: process.env.NODE_ENV === "dev"
 });
+
+console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
 module.exports = {
   entry: ['./app/components/index.js'],
   output: {
     path: path.resolve(__dirname, 'app/build'),
-    publicPath: '/build/',
+    // publicPath: '/build/',
     filename: 'bundle.js'
   },
   module: {
@@ -44,7 +47,11 @@ module.exports = {
     ]
   },
   plugins: [
-    extractSass
+    extractSass,
+    new HtmlWebpackPlugin({
+      title: 'React Windowz!!!',
+      template: './app/index.html'
+    })
   ],
   devtool: 'source-map'
 }

@@ -1,18 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cssobj from 'cssobj';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 
 class WindowzResizer extends React.Component {
   constructor(props) {
     super(props);
-
-    // this.state = {
-    //   style: {
-    //     position
-    //   },
-    // };
-    // debugger;
 
     this.cssobj = {
       '.resizer-position': {
@@ -23,6 +16,7 @@ class WindowzResizer extends React.Component {
         width: '10px',
         cursor: 'nwse-resize',
         background: 'red',
+        zIndex: '1',
       },
     };
     this.winResizer = cssobj(this.cssobj, {
@@ -80,11 +74,72 @@ class WindowzResizer extends React.Component {
     }
     this.winResizer.update();
 
-    // this.mouseDown = this.mouseDown.bind(this);
+    this.mouseDown = this.mouseDown.bind(this);
   }
 
   mouseDown() {
-    
+    const windowzDOM = this.props.windowzDOM();
+    const windowzPos = windowzDOM.getBoundingClientRect();
+    const ID = this.props.id;
+    let top = windowzPos.top;
+    let right = window.innerWidth - windowzPos.right;
+    let bottom = window.innerHeight - windowzPos.bottom;
+    let left = windowzPos.left;
+
+    const mousemoveHandler = (e) => {
+      const direction = this.props.direction.toLowerCase();
+      const winCssObj = this.props.winCssObj[`.windowz-position-${ID}`];
+      let topChange = null;
+      let moveTop = null;
+      let rightChange = null;
+      let moveRight = null;
+      let bottomChange = null;
+      let moveBottom = null;
+      let leftChange = null;
+      let moveLeft = null;
+
+      if (direction.includes('top')) {
+        topChange = e.clientY - top;
+        moveTop = top + topChange;
+      }
+
+      if (direction.includes('right')) {
+        rightChange = (window.innerWidth - e.clientX) - right;
+        moveRight = right + rightChange;
+      }
+
+      if (direction.includes('bottom')) {
+        bottomChange = (window.innerHeight - e.clientY) - bottom;
+        moveBottom = bottom + bottomChange;
+      }
+
+      if (direction.includes('left')) {
+        leftChange = e.clientX - left;
+        moveLeft = left + leftChange;
+      }
+
+      delete winCssObj.height;
+      delete winCssObj.width;
+      winCssObj.top = `${moveTop || windowzPos.top}px`;
+      winCssObj.right = `${moveRight || window.innerWidth - windowzPos.right}px`;
+      winCssObj.bottom = `${moveBottom || window.innerHeight - windowzPos.bottom}px`;
+      winCssObj.left = `${moveLeft || windowzPos.left}px`;
+
+      this.props.windowzPosition.update();
+
+      top = moveTop;
+      right = moveRight;
+      bottom = moveBottom;
+      left = moveLeft;
+    };
+
+    function mouseupHandler() {
+      document.removeEventListener('mousemove', mousemoveHandler, false);
+      document.removeEventListener('mouseup', mouseupHandler, false);
+    }
+
+    document.addEventListener('mousemove', mousemoveHandler, false);
+    document.addEventListener('mouseup', mouseupHandler, false);
   }
 
   render() {
@@ -99,7 +154,11 @@ class WindowzResizer extends React.Component {
 }
 
 WindowzResizer.propTypes = {
+  windowzDOM: PropTypes.func,
+  id: PropTypes.string,
+  winCssObj: PropTypes.obj,
   direction: PropTypes.string,
+  windowzPosition: PropTypes.obj,
 };
 
 export default WindowzResizer;

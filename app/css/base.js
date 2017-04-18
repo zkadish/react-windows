@@ -2,14 +2,6 @@ import cssobj from 'cssobj';
 import * as $ from './vars';
 
 const css = {
-  // body: {
-  //   background: $.background,
-  // },
-  // '.create-windowz-container': {
-  //   padding: '10px',
-  //   width: '150px',
-  //   border: `1px solid ${$.bordercolor}`,
-  // },
   '.create-windowz-button': {
     padding: '5px',
     margin: '5px',
@@ -20,7 +12,6 @@ const css = {
     'box-sizing': 'border-box',
     overflow: 'hidden',
     background: 'palegreen',
-    border: '1px solid green',
   },
   '.windowz-header': {
     display: 'flex',
@@ -29,6 +20,7 @@ const css = {
     height: '30px',
     background: 'seagreen',
     color: '#fff',
+    border: '1px solid seagreen',
     '.title': {
       flex: '1',
     },
@@ -42,6 +34,14 @@ const css = {
       'font-size': '16px',
       color: '#fff',
     },
+  },
+  '.windowz-body': {
+    position: 'absolute',
+    top: '30px',
+    right: '0',
+    bottom: '0',
+    left: '0',
+    border: '1px solid seagreen',
   },
 };
 
